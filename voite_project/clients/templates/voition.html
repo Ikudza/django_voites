@@ -1,0 +1,22 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Голосование</title>
+</head>
+<body>
+	<div>
+	{% for obj in data %}
+		<div style="float:left; margin-left:2em; text-align:center;">
+			<p>{{obj.name}}</p>
+			<p><a href="{{obj.photo}}"><img src="{{obj.photo}}" height="300em"></a></p>
+			<p>
+				<a href="/voite?voite=down&pk={{obj.pk}}"><img src="media/icons/down.png" height="12em"></a>
+				{{obj.voite}}
+				<a href="/voite?voite=up&pk={{obj.pk}}"><img src="media/icons/up.png" height="12em"></a>
+			</p>
+		</div>
+	{% endfor %}
+	</div>
+</body>
+</html>
