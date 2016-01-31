@@ -1,16 +1,21 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
 
 # Create your models here.
 
+
 class Client(models.Model):
+    """
+    models clients for voition
+    """
     name = models.CharField(max_length=100, verbose_name=u'Имя')
     surname = models.CharField(max_length=250, verbose_name=u'Фамилия')
     age = models.IntegerField(verbose_name=u'Возраст')
     birthday = models.DateField(verbose_name=u'Дата')
-    photo = models.ImageField(max_length=250, upload_to='photo', null=True, verbose_name=u'Фото')
+    photo = models.ImageField(max_length=250, upload_to='photo',
+                              null=True, verbose_name=u'Фото')
     voite = models.IntegerField(default=0)
 
     class Meta:

@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Главная страница</title>
-    </head>
-    <body>
-        <p><a href="admin">Админка</a></p>
-        <p><a href="admin/clients/client">Список клиентов</a></p>
-        <p><a href="voite">Голосование</a></p>
-        <p><a href="report">Выгрузить список клиентов</a></p>
-    </body>
-</html>
+{% extends "base.html"%}
+{% block head %}
+    <title>Главная страница</title>
+{% endblock %}
+{% block content %}
+    <p><a href={% url 'admin:index' %}>Админка</a></p>
+    <p><a href={% url 'admin:clients_client_changelist' %}>Список клиентов</a></p>
+    <p><a href="voite">Голосование</a></p>
+    <p><a href="" target="_self" onclick="window.open('report', 'downloadFile')">Выгрузить список клиентов</a></p>
+{% endblock %}

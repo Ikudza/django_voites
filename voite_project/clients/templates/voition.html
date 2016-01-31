@@ -1,10 +1,9 @@
+{% extends "base.html"%}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-<head>
+{% block head %}
 	<title>Голосование</title>
-</head>
-<body>
+{% endblock %}
+{% block content %}
 	<div>
 	{% for obj in data %}
 		<div style="float:left; margin-left:2em; text-align:center;">
@@ -13,10 +12,11 @@
 			<p>
 				<a href="/voite?voite=down&pk={{obj.pk}}"><img src="media/icons/down.png" height="12em"></a>
 				{{obj.voite}}
-				<a href="/voite?voite=up&pk={{obj.pk}}"><img src="media/icons/up.png" height="12em"></a>
+				{%if obj.voite != 10 %}
+					<a href="/voite?voite=up&pk={{obj.pk}}"><img src="media/icons/up.png" height="12em"></a>
+				{%endif%}
 			</p>
 		</div>
 	{% endfor %}
 	</div>
-</body>
-</html>
+{% endblock %}
