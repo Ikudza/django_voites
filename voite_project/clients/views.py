@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from clients.models import Client
 from clients.tasks import create_list_clients_xlsx
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,7 @@ def index(request):
 
 @login_required(login_url=log_url)
 def view_photo(request):
-    if request.GET:
+    if u"voite" in request.GET.keys():
         pk = request.GET["pk"]
         if request.GET["voite"] == u"down":
             voite = -1
@@ -30,14 +30,20 @@ def view_photo(request):
                      "voite": client.voite,
                      "name": u"{0} {1}".format(client.name, client.surname)})
     result = {"data": data}
-    return render(request, "voition.html", result)
+    if u"update" not in request.GET.keys():
+        return render(request, "voition.html", result)
+    else:
+        return JsonResponse(result)
 
 
 def voition(pk, voite):
+    import random
+    import time
     try:
         with transaction.atomic():
             client = Client.objects.get(pk=pk)
             client.voite += voite
+            # time.sleep(random.randrange(2, 8))
             client.save()
     except:
         voition(pk, voite)

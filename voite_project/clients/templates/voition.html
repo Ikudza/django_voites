@@ -2,6 +2,25 @@
 {% load staticfiles %}
 {% block head %}
 	<title>Голосование</title>
+	<script type="text/javascript">
+		var voite_update = function() {
+			var xmlhttp = new XMLHttpRequest()
+			xmlhttp.open('GET', '/voite?update=true', true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4) {
+					if(xmlhttp.status == 200) {
+						data = JSON.parse(xmlhttp.responseText)["data"];
+						data.forEach(function(item, i, data) {
+							debugger
+							document.getElementById(item.pk).textContent=item.voite
+						})
+					}
+				}
+			};
+			xmlhttp.send(null);
+		}
+		setInterval(voite_update, 5000)
+	</script>
 {% endblock %}
 {% block content %}
 	<div>
@@ -9,13 +28,17 @@
 		<div style="float:left; margin-left:2em; text-align:center;">
 			<p>{{obj.name}}</p>
 			<p><a href="{{obj.photo}}"><img src="{{obj.photo}}" height="300em"></a></p>
-			<p>
-				<a href="/voite?voite=down&pk={{obj.pk}}"><img src="media/icons/down.png" height="12em"></a>
-				{{obj.voite}}
-				{%if obj.voite != 10 %}
+			<div>
+				{% if obj.voite != 10 %}
 					<a href="/voite?voite=up&pk={{obj.pk}}"><img src="media/icons/up.png" height="12em"></a>
 				{%endif%}
-			</p>
+			</div>
+			<div id={{obj.pk}}>
+				{{obj.voite}}
+			</div>
+			<div>
+				<a href="/voite?voite=down&pk={{obj.pk}}"><img src="media/icons/down.png" height="12em"></a>
+			</div>
 		</div>
 	{% endfor %}
 	</div>
