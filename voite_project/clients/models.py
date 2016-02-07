@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+# from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
@@ -16,16 +16,11 @@ class Client(models.Model):
     birthday = models.DateField(verbose_name=u'Дата')
     photo = models.ImageField(max_length=250, upload_to='photo',
                               null=True, verbose_name=u'Фото')
-    voite = models.IntegerField(default=0)
+    voite = models.IntegerField(default=0, verbose_name="Количество голосов")
 
     class Meta:
         verbose_name = "Client"
         verbose_name_plural = "Clients"
-
-    def save(self):
-        if self.voite > 10:
-            self.voite = 10
-        super(Client, self).save()
 
     def __getitem__(self, attrname):
         return self.__getattribute__(attrname)

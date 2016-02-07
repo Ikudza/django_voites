@@ -4,6 +4,7 @@ from clients.models import Client
 from clients.tasks import create_list_clients_xlsx
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import F
 
 log_url = 'admin:login'
 
@@ -22,6 +23,10 @@ def view_photo(request):
         else:
             voite = 1
         voition(pk, voite)
+        client = Client.objects.get(pk=pk)
+        return JsonResponse({"data":
+                            {"pk": client.pk, "voite": client.voite}})
+
     clients = list(Client.objects.all())
     data = []
     for client in clients:
@@ -36,17 +41,15 @@ def view_photo(request):
         return JsonResponse(result)
 
 
+@transaction.atomic
 def voition(pk, voite):
-    import random
-    import time
-    try:
-        with transaction.atomic():
-            client = Client.objects.get(pk=pk)
-            client.voite += voite
-            # time.sleep(random.randrange(2, 8))
-            client.save()
-    except:
-        voition(pk, voite)
+    client = Client.objects.select_for_update()\
+                           .get(pk=pk)
+    # import pdb; pdb.set_trace()
+    if client.voite > 9 and voite > 0:
+        return
+    client.voite = F("voite") + voite
+    client.save()
 
 
 @login_required(login_url=log_url)

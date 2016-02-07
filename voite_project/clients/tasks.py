@@ -25,7 +25,7 @@ def create_list_clients_xlsx(response):
     wb = Workbook()
     ws = wb.active
     ws.title = u"Clients"
-    clients = list(Client.objects.all())
+    clients = Client.objects.all()
     for i in xrange(len(clients)):
         for j in xrange(1, len(fields)+1):
             if i == 0:

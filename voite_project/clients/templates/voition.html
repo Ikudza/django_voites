@@ -11,7 +11,6 @@
 					if(xmlhttp.status == 200) {
 						data = JSON.parse(xmlhttp.responseText)["data"];
 						data.forEach(function(item, i, data) {
-							debugger
 							document.getElementById(item.pk).textContent=item.voite
 						})
 					}
@@ -20,6 +19,20 @@
 			xmlhttp.send(null);
 		}
 		setInterval(voite_update, 5000)
+
+		var voiting = function(pk, stat) {
+			var xmlhttp = new XMLHttpRequest()
+			xmlhttp.open('GET', '/voite?voite='+stat+'&pk='+pk, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4) {
+					if(xmlhttp.status == 200) {
+						item = JSON.parse(xmlhttp.responseText)["data"];
+						document.getElementById(item.pk).textContent=item.voite
+					}
+				}
+			};
+			xmlhttp.send(null);
+		};
 	</script>
 {% endblock %}
 {% block content %}
@@ -29,15 +42,15 @@
 			<p>{{obj.name}}</p>
 			<p><a href="{{obj.photo}}"><img src="{{obj.photo}}" height="300em"></a></p>
 			<div>
-				{% if obj.voite != 10 %}
-					<a href="/voite?voite=up&pk={{obj.pk}}"><img src="media/icons/up.png" height="12em"></a>
-				{%endif%}
+				{# {% if obj.voite < 10 %} #}
+					<img  style="cursor: pointer"src="media/icons/up.png" onclick="voiting({{obj.pk}}, 'up')" height="12em">
+				{# {%endif%} #}
 			</div>
 			<div id={{obj.pk}}>
 				{{obj.voite}}
 			</div>
 			<div>
-				<a href="/voite?voite=down&pk={{obj.pk}}"><img src="media/icons/down.png" height="12em"></a>
+				<img style="cursor: pointer" src="media/icons/down.png" onclick="voiting({{obj.pk}}, 'down')" height="12em">
 			</div>
 		</div>
 	{% endfor %}
